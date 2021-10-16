@@ -1,0 +1,13 @@
+ubind @mega
+sensor health @unit @health
+jump 10 lessThanEq health 350
+ulocate damaged turret false @copper outx outy found result
+jump 10 notEqual found 1
+sensor outx result @x
+sensor outy result @y
+ucontrol approach outx outy 23 0 0
+ucontrol targetp result 1 1 0 0
+jump 0 always x false
+ucontrol target 0 0 0 0 0
+ucontrol approach @thisx @thisy 6 0 0
+jump 0 always x false
