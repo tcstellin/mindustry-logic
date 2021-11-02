@@ -1,0 +1,95 @@
+op rand id @time 1
+set i -1
+op add i i 1
+jump 1 greaterThanEq i @links
+print "Establishing link"
+printflush message1
+getlink link i
+sensor type link @type
+jump 11 equal type @container
+jump 11 equal type @vault
+jump 2 always x false
+sensor linkX link @x
+sensor linkY link @y
+sensor firstItem link @firstItem
+sensor dead link @dead
+print "waiting for items"
+printflush message1
+jump 1 equal dead 1
+jump 13 equal firstItem null
+set i 0
+op add i i 1
+jump 28 greaterThanEq i 25
+ubind @flare
+print "unit bind flare"
+printflush message1
+sensor flag @unit @flag
+jump 48 equal flag 0
+jump 20 always i 25
+set i 0
+op add i i 1
+jump 37 greaterThanEq i 25
+ubind @horizon
+print "unit bind horizon"
+printflush message1
+sensor flag @unit @flag
+jump 48 equal flag 0
+jump 29 always i 25
+set i 0
+op add i i 1
+ubind @pulsar
+jump 42 lessThanEq i 25
+end
+print "unit bind pulsar"
+printflush message1
+sensor flag @unit @flag
+jump 47 equal flag 0
+jump 38 always flag 0
+ucontrol boost 1 vaultY 1 0 0
+ucontrol flag id vaultY 1 0 0
+ucontrol move linkX linkY 1 0 0
+sensor dead @unit @dead
+jump 53 equal dead 0
+end
+sensor flag @unit @flag
+jump 56 equal flag id
+end
+print "drone flying to vault for pickup"
+printflush message1
+ucontrol within linkX linkY 2 within 0
+jump 49 equal within 0
+ucontrol itemTake link firstItem 900 0 0
+print "taking items from vault"
+printflush message1
+sensor droneItem @unit @firstItem
+jump 66 equal flag id
+end
+jump 60 strictEqual droneItem null
+ulocate building core false @copper coreX coreY found core
+ucontrol approach coreX coreY 2 0 0
+sensor dead @unit @dead
+jump 72 equal dead 0
+end
+sensor flag @unit @flag
+jump 75 equal flag id
+end
+print "drone flying to core for dropoff"
+printflush message1
+ucontrol within coreX coreY 4 within 0
+jump 68 notEqual within 1
+ucontrol itemDrop core 900 900 0 0
+sensor dead @unit @dead
+jump 83 equal dead 0
+end
+sensor flag @unit @flag
+jump 86 equal flag id
+end
+sensor items @unit @totalItems
+print "dropping item at core: "
+print firstItem
+printflush message1
+jump 79 greaterThan items 0
+sensor firstItem link @firstItem
+jump 49 notEqual firstItem null
+ucontrol flag 0 0 0 0 0
+ucontrol idle 0 0 0 0 0

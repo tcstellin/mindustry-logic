@@ -1,0 +1,36 @@
+set i -1
+op add i i 1
+jump 0 greaterThanEq i @links
+getlink link i
+sensor type link @type
+print "Establishing link: "
+print type
+printflush message1
+jump 10 equal type @vault
+jump 1 always x false
+sensor linkX link @x
+sensor linkY link @y
+print "Link established"
+printflush message1
+ubind @flare
+sensor controlled @unit @controlled
+jump 18 equal controlled 0
+end
+sensor flag @unit @flag
+jump 21 equal flag 0
+ucontrol flag 0 0 0 0 0
+sensor firstItem @unit @firstItem
+jump 24 notEqual firstItem null
+end
+ucontrol flag 69 0 0 0 0
+ucontrol approach linkX linkY 3 0 0
+print "drop items"
+printflush message1
+ucontrol within linkX linkY 4 within 0
+sensor dead @unit @dead
+jump 32 equal dead 0
+end
+jump 25 equal within 0
+ucontrol itemDrop link 900 0 0 0
+ucontrol flag 0 0 0 0 0
+ucontrol idle 0 0 0 0 0

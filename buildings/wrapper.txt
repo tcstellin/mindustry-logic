@@ -1,0 +1,41 @@
+set i 0
+print "Establishing link to vault\n"
+printflush message1
+getlink link i
+op add i i 1
+jump 0 greaterThanEq i 9
+sensor type link @type
+jump 9 equal type @vault
+jump 3 always x false
+print "Linked to vault "
+sensor vaultX link @x
+sensor vaultY link @y
+sensor amount link @graphite
+jump 0 equal amount 1000
+print "unit bind\n"
+printflush message1
+ubind @mega
+sensor flag @unit @flag
+jump 16 notEqual flag null
+ucontrol flag id 0 0 0 0
+ulocate building core false @copper coreX coreY found core
+print "drone fly to core"
+printflush message1
+ucontrol move coreX coreY 0 0 0
+ucontrol within coreX coreY 4 within 0
+jump 23 equal within 0
+ucontrol itemTake core @graphite 60 0 0
+print "drone take items from core"
+printflush message1
+sensor result @unit @graphite
+jump 29 lessThan result 60
+print "drone fly to vault"
+printflush message1
+ucontrol approach vaultX vaultY 0 0 0
+ucontrol within vaultX vaultY 1 within 0
+jump 33 equal within 0
+ucontrol itemDrop link 60 0 0 0
+ucontrol flag null coreY 5 within 0
+ucontrol approach coreX coreY 25 within 0
+ucontrol idle null coreY 5 within 0
+jump 0 always x false
